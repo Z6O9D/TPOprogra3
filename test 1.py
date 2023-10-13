@@ -10,25 +10,26 @@ def buscar(letra):
 
 
 
-class solucion:
+class grafo:
     inicio=None
     objetivo=None
     caminos=[]
     class Nodo:
         def __init__(self,x,y):
-            self.posicion = (x,y)
+            self.x = x
+            self.y = y
             self.arriba = None
             self.abajo = None
             self.derecha = None
             self.izquierda = None
-        def conectar(self,nodo,pos):
-            if pos == "arriba":
+        def conectar(self,nodo,i,j):
+            if self.y > i: 
                 self.arriba = nodo
-            if pos == "abajo":
+            if self.y < i:
                 self.abajo = nodo
-            if pos == "derecha":
+            if self.x < j:
                 self.derecha = nodo
-            if pos == "izquierda":
+            if self.x > j:
                 self.izquierda = nodo
 
     def __init__(self,Nodo):
@@ -42,6 +43,8 @@ class solucion:
         return nodo.derecha
     def izquierda(nodo):
         return nodo.izquierda
+    def posibles(self):
+        return self.caminos
 
 
 
