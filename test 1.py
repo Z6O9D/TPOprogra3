@@ -10,10 +10,7 @@ def buscar(letra):
 
 
 
-class grafo:
-    inicio=None
-    objetivo=None
-    caminos=[]
+class laberinto:
     class Nodo:
         def __init__(self,x,y):
             self.x = x
@@ -31,10 +28,17 @@ class grafo:
                 self.derecha = nodo
             if self.x > j:
                 self.izquierda = nodo
+    def __init__(self,inicio):
+        start = buscar(inicio)
+        self.visitados = []
+        self.inicio = self.Nodo(start[0],start[1])
+        self.addvisitado(start)
+        self.caminos=[]
 
-    def __init__(self,Nodo):
-        self.inicio = Nodo
-    
+    def addvisitado(self,tuple):
+        self.visitados.append(tuple)
+    def addcamino(self,tuple):
+        self.visitados.append(tuple)
     def arriba(nodo):
         return nodo.arriba
     def abajo(nodo):
@@ -45,22 +49,8 @@ class grafo:
         return nodo.izquierda
     def posibles(self):
         return self.caminos
-
-
-
-def arriba(x,y):
-    return (x-1,y)
-def abajo(x,y):
-    return (x+1,y)
-def derecha(x,y):
-    return (x,y+1)
-def izquierda(x,y):
-    return (x,y-1)
-
-def llegar(inicio,fin,actual):
-    recorrido=[]
-    if inicio == fin:
-        caminos.append(recorrido)
+    def test(self,objetivo,matriz):
+        pass
 
 
 
