@@ -1,7 +1,4 @@
 # TPOprogra3
-El codigo esta incompleto, esta en otra rama, el objetivo es que vaya 
-haciendo un grafo con nodos conectando solamente las ubicaciones
-disponibles propagandose en direccion a su objetivo
-Este es un breve resumen de como pense que seria eficiente el codigo,
-cada cual puede subir lo que crea que es mejor o editar el codigo en otra rama.
+Estrategia:
+comparar el camino mas corto entre todos los portales teniendo en cuenta su distancia a la salida con el camino a la entrada a la salida para ver de que forma se llega mas rapido y el resultado es la solución final. Cada uno haga un intento de solucion en su rama.
 Gracias
