@@ -1,4 +1,4 @@
-
+"""Intente buscar errores en el codigo para mejorarlo"""
 
 def direccion(pos,find):
     direccion=[]
