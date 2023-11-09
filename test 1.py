@@ -15,9 +15,9 @@ def search(pos_inicial,find):
     return direccion
 
 def mostrar_conexiones(objeto):
-    for key in objeto.portales.values():
-        print(key[0].sig)
-
+    for key in objeto.portales:
+        for portal in objeto.portales[key]:
+            print("portal: ",portal.letra,"\nsig",portal.sig,"\n",portal.sig_peso)
 
 class Nodo:
     def __init__(self, letra,pos, cambio):
@@ -65,24 +65,27 @@ class laberinto:
 
 
     def caminos(self,nodo_fin,nodo_inicio,info,mov): #caminos mas cortos de una posicion X a la posicion Y
-        i=nodo_inicio.pos
-        j=nodo_inicio.pos
-        info[i].append([i,j])
+        i=nodo_inicio[0]
+        j=nodo_inicio[1]
+        info[0].append([i,j])
         tablero = self.matriz
         mov+=" "+str(i)+","+str(j)
-        buscar=search(nodo_inicio,nodo_fin)
+        buscar=search(nodo_inicio,nodo_fin.pos)
 
         if tablero[i][j] != info[0] and (i>0 or i<len(tablero)) and (j>0 or j<len(tablero)) and tablero[i][j] != "#":
         
-            if buscar[0]!=0 and i+buscar[0] < len(tablero) and [i+buscar[0],j] not in info[1]:
+            if buscar[0]!=0 and i+buscar[0] < len(tablero) and [i+buscar[0],j] not in info[0]:
                 self.caminos(nodo_fin,[i+buscar[0],j],info,mov)
-            if buscar[1]!=0 and j+buscar[1] < len(tablero) and [i,j+buscar[1]] not in info[1]:
+            if buscar[1]!=0 and j+buscar[1] < len(tablero) and [i,j+buscar[1]] not in info[0]:
                 self.caminos(nodo_fin,[i,j+buscar[1]],info,mov)
-
-        if tablero[i][j]==info[0] and (info[0] not in info[-1].sig or len(mov.split(" ")-1)<info[-1].sig_peso[info[0]]):
-            a=mov.split(" ")
-            print("entro")
-            info[-1].add_next(info[0],len(a)-1)
+        if tablero[i][j]==nodo_fin.letra:
+            if nodo_fin.letra not in info[-1].sig_peso:
+                a=mov.split(" ")
+                info[-1].add_next(nodo_fin,len(a)-1)
+            else:
+                if len(info)-1<info[-1].sig_peso[nodo_fin.letra]:
+                    a=mov.split(" ")
+                    info[-1].add_next(nodo_fin,len(a)-1)
 
     def caminos_cortos(self,pos):
         visitar = []
@@ -100,18 +103,26 @@ class laberinto:
         return visitar
 
     def buscar_conexiones(self):
-        for portal in self.portal_list:
-            self.caminos(self.portales[portal][0],self.inicio,["S",[],test.inicio],"")
-            self.caminos(self.portales[portal][1],self.inicio,["S",[],test.inicio],"")
         for key in self.portal_list:
-            for portal in self.portal_list[key]:
-                for portal_buscado in self.portal_list:
-                    if key!=portal_buscado and (self.portales[portal][0] not in portal.sig or self.portales[portal][1] not in portal.sig):
-                        self.caminos(portal_buscado[0],portal,["S",[],test.inicio],"")
-                        self.caminos(portal_buscado[1],portal,["S",[],test.inicio],"")
-        for portal in self.portal_list:
-            self.caminos(self.salida, self.portales[portal][0],["S",[],test.inicio],"")
-            self.caminos(self.salida, self.portales[portal][1],["S",[],test.inicio],"")
+            for portal in self.portales[key]:
+                self.caminos(portal,self.inicio.pos,[[],self.inicio],"")
+        a=len(self.portal_list)
+
+        # costo:  x letra
+        conti=0
+        for i in range(conti,len(self.portal_list)):
+            for j in range(i+1,len(self.portal_list)):
+                for portal_buscado in self.portales[self.portal_list[j]]:
+                    for portal in self.portales[self.portal_list[i]]:
+                        self.caminos(portal_buscado,portal.pos,[[],portal],"")
+                    print(portal.letra,portal.sig_peso,"con",portal_buscado.letra)
+                    portal_buscado.add_next(portal,portal.sig_peso[portal_buscado.letra])
+
+            conti+=1
+        for key in self.portal_list:
+            for portal in self.portales[key]:
+                self.caminos(self.salida,portal.pos,[[],portal],"")
+
 
     def buscar_salida(self):
         pass
@@ -121,14 +132,12 @@ class laberinto:
 filas=open("laberinto.txt", "r")
 target = []
 for linea in filas.readlines():
-    linea = linea.replace(".\n",".")
+    linea = linea.replace("\n","")
     target.append(str(linea).split(" "))
 filas.close
 
 
 test = laberinto(target)
-test.buscar_conexiones
+test.buscar_conexiones()
 
-print(test.inicio.sig)
-print(test.inicio.sig_peso)
-print(test.portales["a"][0].sig)
+mostrar_conexiones(test)
