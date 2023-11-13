@@ -1,7 +1,5 @@
 # TPOprogra3
-Este es el codigo incompleto, el objetivo es que vaya 
-haciendo un grafo con nodos conectando solamente las ubicaciones
-disponibles propagandose en direccion a su objetivo
-Este es un breve resumen de como pense que seria eficiente el codigo,
-cada cual puede subir lo que crea que es mejor o editar el codigo en otra rama.
-Gracias
+Codigo similar a un grafo
+-se añade la entrada y la salida como nodos
+-se busca la distancia entre todos los nodos
+-se evaluan los pesos entre los nodos para sacar el camino mas corto
