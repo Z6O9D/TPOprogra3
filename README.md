@@ -10,5 +10,4 @@ Una vez encontrados la entrada, la salida y todos los portales, se inicia una bu
 
 Complejidad:
 
-O( i * j + (n - m) ) 
-Donde i y j son las dimensiones del laberinto y n son la cantidad de casillas posibles  y p son las paredes 
+O (n * m) ->  donde n y m son las dimensiones del laberinto.
