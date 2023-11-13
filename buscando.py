@@ -1,11 +1,11 @@
 # Solucion planteada :
 
-def solve(maze): # O( i * j + (n - m) ) donde i y j son las dimensiones del laberinto y n son la cantidad de casillas posibles  y p son las paredes 
+def solve(maze):
     # Encuentra la entrada, la salida y los portales
     entrada = None
     salida = None
     portales = {}
-    for i in range(len(maze)):  # O( i * j )
+    for i in range(len(maze)):  
         for j in range(len(maze[0])):
             if maze[i][j] == 'E':
                 entrada = (i, j)
@@ -19,7 +19,7 @@ def solve(maze): # O( i * j + (n - m) ) donde i y j son las dimensiones del labe
     # BFS ( Busqueda en amplitud ) desde la entrada
     queue = [(entrada, 0)]
     visited = {entrada}
-    while queue: # Mientras la cola no este vacia           O( n - m )
+    while queue: # Mientras la cola no este vacia          
         (x, y), steps = queue.pop(0)  # Usamos pop(0) para eliminar el primer elemento
         if (x, y) == salida:
             return steps  # Encontramos la salida
