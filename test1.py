@@ -60,15 +60,17 @@ class laberinto:
             return
         i=nodo_inicio_pos[0]
         j=nodo_inicio_pos[1]
-        info.append([i,j])
+        if i!=nodo_fin.pos[0] or j!=nodo_fin.pos[1]:
+            info.append([i,j])
         tablero = self.matriz
+
         mov+=" "+str(i)+","+str(j)
         buscar=search(nodo_inicio_pos,nodo_fin.pos)
-        if tablero[i][j] != info:
+        if i!=nodo_fin.pos[0] or j!=nodo_fin.pos[1]:
         
             if i+buscar[0]>=0 and i+buscar[0] < len(tablero) and [i+buscar[0],j] not in info and tablero[i+buscar[0]][j] != "#": #greedy
                 self.caminos(nodo_fin,[i+buscar[0],j],info,portal,mov,revisar)
-            if j+buscar[1]>=0 and j+buscar[1] < len(tablero) and [i,j+buscar[1]] not in info and tablero[i][j+buscar[1]] != "#": #greedy
+            if j+buscar[1]>=0 and j+buscar[1] < len(tablero[i]) and [i,j+buscar[1]] not in info and tablero[i][j+buscar[1]] != "#": #greedy
                 self.caminos(nodo_fin,[i,j+buscar[1]],info,portal,mov,revisar)
 
             if 0 <= i-1 and [i-1,j] not in info and tablero[i-1][j] != "#":
@@ -77,14 +79,15 @@ class laberinto:
             if i+1 <len(tablero) and [i+1,j] not in info and tablero[i+1][j] != "#":
                 revisar = True
                 self.caminos(nodo_fin,[i+1,j],info,portal,mov,revisar,minimo)
-            if j+1 <len(tablero) and [i,j+1] not in info and tablero[i][1+j] != "#":
+            if j+1 <len(tablero[i]) and [i,j+1] not in info and tablero[i][1+j] != "#":
                 revisar = True
                 self.caminos(nodo_fin,[i,j+1],info,portal,mov,revisar,minimo)
             if 0 <=j-1 and [i,j-1] not in info and tablero[i][1-j] != "#":
                 revisar = True
                 self.caminos(nodo_fin,[i,j-1],info,portal,mov,revisar,minimo)
 
-        if tablero[i][j]==nodo_fin.letra:
+        if i==nodo_fin.pos[0] and j== nodo_fin.pos[1]:
+            print("entro")
             if nodo_fin.letra not in portal.sig_peso:
                 a=mov.split(" ")
                 portal.add_next(nodo_fin,len(a)-2)
@@ -103,7 +106,7 @@ class laberinto:
         for key in self.portales:
             for portal in self.portales[key]:
                 self.caminos(portal,self.inicio.pos,[],self.inicio,"",False)
-
+        
         conti=0
         for i in range(conti,len(self.portal_list)):
             for j in range(i+1,len(self.portal_list)):
@@ -120,6 +123,7 @@ class laberinto:
         if len(self.inicio.sig)>0:
             if "S" in self.inicio.sig_peso:
                 minimo=[self.inicio.sig_peso["S"]]
+                print(minimo)
             else:
                 minimo=[len(self.matriz)**4]
             cont=0
@@ -149,7 +153,7 @@ for linea in filas.readlines(): # complejidad O(n) n=rango de la matriz
     target.append(str(linea).split(" "))
 filas.close
 
-
+print(target)
 test = laberinto(target)
 
 test.buscar_conexiones()
