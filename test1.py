@@ -34,7 +34,7 @@ class laberinto:
         self.caminos_posibles = {}
         self.portales = {}
         self.inicio = None
-        self.salida = None
+        self.salida = []
         for i in range(len(matriz)):
             for j in range(len(matriz[i])):
                 casilla = matriz[i][j]
@@ -42,7 +42,7 @@ class laberinto:
                     if casilla == "E":
                         self.inicio = Nodo(casilla,[i,j])
                     elif casilla == "S":
-                        self.salida = Nodo(casilla,[i,j])
+                        self.salida.append(Nodo(casilla,[i,j]))
                     elif casilla not in self.portal_list:
                         self.portal_list.append(casilla)
                         pos = [i,j]
@@ -87,7 +87,6 @@ class laberinto:
                 self.caminos(nodo_fin,[i,j-1],info,portal,mov,revisar,minimo)
 
         if i==nodo_fin.pos[0] and j== nodo_fin.pos[1]:
-            print("entro")
             if nodo_fin.letra not in portal.sig_peso:
                 a=mov.split(" ")
                 portal.add_next(nodo_fin,len(a)-2)
@@ -102,7 +101,8 @@ class laberinto:
 
 
     def buscar_conexiones(self): #  complejidad O(2*n+n^2) n=cantidad de nodos
-        self.caminos(self.salida,self.inicio.pos,[],self.inicio,"",False)
+        for i in range(len(self.salida)):
+            self.caminos(self.salida[i],self.inicio.pos,[],self.inicio,"",False)
         for key in self.portales:
             for portal in self.portales[key]:
                 self.caminos(portal,self.inicio.pos,[],self.inicio,"",False)
@@ -118,18 +118,18 @@ class laberinto:
             conti+=1
         for key in self.portal_list:
             for portal in self.portales[key]:
-                self.caminos(self.salida,portal.pos,[],portal,"",False)
+                for i in range(len(self.salida)):
+                    self.caminos(self.salida[i],portal.pos,[],portal,"",False)
     def buscar_salida(self):
         if len(self.inicio.sig)>0:
-            if "S" in self.inicio.sig_peso:
-                minimo=[self.inicio.sig_peso["S"]]
-                print(minimo)
-            else:
-                minimo=[len(self.matriz)**4]
+            minimo=[len(self.matriz)**4]
             cont=0
             for key in self.inicio.sig:
                 if key.letra!="S":
                     self.evaluar(key.cambio,"",self.inicio.sig_peso[key.letra]+1,minimo)
+                else:
+                    contar=self.inicio.sig_peso[key.letra]
+                    minimo.append(contar)
             if min(minimo)<len(self.matriz)**3:
                 return min(minimo)
             else:
@@ -153,7 +153,6 @@ for linea in filas.readlines(): # complejidad O(n) n=rango de la matriz
     target.append(str(linea).split(" "))
 filas.close
 
-print(target)
 test = laberinto(target)
 
 test.buscar_conexiones()
